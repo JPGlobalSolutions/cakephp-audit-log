@@ -141,6 +141,7 @@ class AuditableBehavior extends Behavior
             'model' => $alias,
             'entity_id' => $entity->id,
             'source_id' => $source['id'],
+            'user_id' => $source['id'],
             'source_ip' => $source['ip'],
             'source_url' => $source['url'],
             'description' => $source['description'],
