@@ -24,7 +24,7 @@ class AuditableBehavior extends Behavior
      *
      * @var array
      */
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         'on' => ['delete', 'create', 'update'],
         'ignore' => ['created', 'updated', 'modified'],
         'habtm' => [],
@@ -347,9 +347,7 @@ class AuditableBehavior extends Behavior
             $conditions[$alias . '.' . $key] = $entity->$key;
         }
 
-        $query = $this->_table->find('all', [
-            'conditions' => $conditions,
-        ]);
+        $query = $this->_table->find('all', conditions: $conditions);
         if (!empty($habtm)) {
             $query->contain(array_values($habtm));
         }
