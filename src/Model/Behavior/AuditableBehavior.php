@@ -347,7 +347,7 @@ class AuditableBehavior extends Behavior
             $conditions[$alias . '.' . $key] = $entity->$key;
         }
 
-        $query = $this->_table->find('all', [
+        $query = $this->_table->find('withDeleted', [
             'conditions' => $conditions,
         ]);
         if (!empty($habtm)) {
