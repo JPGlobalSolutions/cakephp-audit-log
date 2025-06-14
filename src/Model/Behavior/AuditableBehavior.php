@@ -350,9 +350,19 @@ class AuditableBehavior extends Behavior
             $conditions[$alias . '.' . $key] = $entity->$key;
         }
 
-        $query = $this->_table->find('withDeleted', [
-            'conditions' => $conditions,
-        ]);
+        $reflection = new ReflectionClass($this->_table);
+        $hasCustomFinder = $reflection->hasMethod('findWithDeleted');
+        
+        if ($hasCustomFinder) {
+            $query = $this->_table->find('withDeleted', [
+                'conditions' => $conditions,
+            ]);
+        } else {
+            $query = $this->_table->find('all', [
+                'conditions' => $conditions,
+            ]);
+        }
+        
         if (!empty($habtm)) {
             $query->contain(array_values($habtm));
         }
