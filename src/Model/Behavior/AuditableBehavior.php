@@ -11,6 +11,7 @@ use Cake\ORM\Association\BelongsToMany;
 use Cake\ORM\Behavior;
 use Cake\ORM\Locator\TableLocator;
 use Cake\Utility\Inflector;
+use ReflectionClass;
 
 /**
  * Auditable behavior
