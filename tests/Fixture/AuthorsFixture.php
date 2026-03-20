@@ -34,5 +34,5 @@ class AuthorsFixture extends TestFixture
      *
      * @var array
      */
-    public $records = [];
+    public array $records = [];
 }

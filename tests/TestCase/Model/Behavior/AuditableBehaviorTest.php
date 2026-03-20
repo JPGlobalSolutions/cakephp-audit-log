@@ -16,7 +16,7 @@ class AuditableBehaviorTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [
+    public array $fixtures = [
         'plugin.AuditLog.AuditDeltas',
         'plugin.AuditLog.Audits',
         'plugin.AuditLog.Authors',
@@ -91,12 +91,10 @@ class AuditableBehaviorTest extends TestCase
         $this->assertNotNull($new_article->id);
 
         $tableLocator = new TableLocator();
-        $audit = $tableLocator->get('AuditLog.Audits')->find('all', [
-            'conditions' => [
-                'event' => 'CREATE',
-                'model' => 'Articles',
-                'entity_id' => $new_article->id,
-            ],
+        $audit = $tableLocator->get('AuditLog.Audits')->find('all', conditions: [
+            'event' => 'CREATE',
+            'model' => 'Articles',
+            'entity_id' => $new_article->id,
         ])->firstOrFail();
 
         $this->assertEquals('15', $audit->source_id);
@@ -106,10 +104,8 @@ class AuditableBehaviorTest extends TestCase
 
         $article = json_decode($audit->json_object, true);
 
-        $deltas = $tableLocator->get('AuditLog.AuditDeltas')->find('all', [
-            'conditions' => [
-                'AuditDeltas.audit_id' => $audit->id,
-            ],
+        $deltas = $tableLocator->get('AuditLog.AuditDeltas')->find('all', conditions: [
+            'AuditDeltas.audit_id' => $audit->id,
         ])->toArray();
 
         // Verify the audit record
@@ -154,14 +150,13 @@ class AuditableBehaviorTest extends TestCase
         $this->Articles->save($entity);
 
         $tableLocator = new TableLocator();
-        $article_audit = $tableLocator->get('AuditLog.Audits')->find('all', [
-            'conditions' => [
-                'Audits.event' => 'CREATE',
-                'Audits.model' => 'Articles',
-                'Audits.entity_id' => $entity->id,
-            ],
-            'contain' => ['AuditDeltas'],
-        ])->firstOrFail()->toArray();
+        $article_audit = $tableLocator->get('AuditLog.Audits')->find('all',
+        conditions: [
+            'Audits.event' => 'CREATE',
+            'Audits.model' => 'Articles',
+            'Audits.entity_id' => $entity->id,
+        ],
+        contain: ['AuditDeltas'])->firstOrFail()->toArray();
         $article = json_decode($article_audit['json_object'], true);
 
         // Verify the audit record
@@ -188,14 +183,13 @@ class AuditableBehaviorTest extends TestCase
 
         $this->assertTrue(empty($article_audit['audit_deltas']));
 
-        $author_audit = $tableLocator->get('AuditLog.Audits')->find('all', [
-            'conditions' => [
-                'Audits.event' => 'CREATE',
-                'Audits.model' => 'Authors',
-                'Audits.entity_id' => $entity->author->id,
-            ],
-            'contain' => ['AuditDeltas'],
-        ])->firstOrFail();
+        $author_audit = $tableLocator->get('AuditLog.Audits')->find('all',
+        conditions: [
+            'Audits.event' => 'CREATE',
+            'Audits.model' => 'Authors',
+            'Audits.entity_id' => $entity->author->id,
+        ],
+        contain: ['AuditDeltas'])->firstOrFail();
 
         $author = json_decode($author_audit['json_object'], true);
 
@@ -248,17 +242,16 @@ class AuditableBehaviorTest extends TestCase
 
         $tableLocator = new TableLocator();
         // Retrieve the audits for the last 3 articles saved
-        $audits = $tableLocator->get('AuditLog.Audits')->find('all', [
-            'conditions' => [
-                'Audits.event' => 'CREATE',
-                'Audits.model' => 'Articles',
-            ],
-            'order' => [
-                'Audits.entity_id' => 'DESC',
-            ],
-            'limit' => 3,
-            'contain' => ['AuditDeltas'],
-        ])->all()->toArray();
+        $audits = $tableLocator->get('AuditLog.Audits')->find('all',
+        conditions: [
+            'Audits.event' => 'CREATE',
+            'Audits.model' => 'Articles',
+        ],
+        order: [
+            'Audits.entity_id' => 'DESC',
+        ],
+        limit: 3,
+        contain: ['AuditDeltas'])->all()->toArray();
 
         $article_1 = json_decode($audits[2]['json_object'], true);
         $article_2 = json_decode($audits[1]['json_object'], true);
@@ -480,23 +473,19 @@ class AuditableBehaviorTest extends TestCase
         $tableLocator = new TableLocator();
         $this->Audit = $tableLocator->get('AuditLog.Audits');
         $this->AuditDelta = $tableLocator->get('AuditLog.AuditDeltas');
-        $article = $this->Articles->find('all', [
-            'order' => ['random()'],
-        ])->first();
+        $article = $this->Articles->find('all', order: ['random()'])->first();
 
         $id = $article->id;
 
         $this->Articles->delete($article);
 
-        $last_audit = $this->Audit->find('all', [
-            //'contain'    => array('AuditDelta'), <-- What does this solve?
-            'conditions' => [
-                'Audits.event' => 'DELETE',
-                'Audits.model' => 'Articles',
-                'Audits.entity_id' => $id,
-            ],
-            'order' => 'Audits.created DESC',
-        ])->all();
+        $last_audit = $this->Audit->find('all',
+        conditions: [
+            'Audits.event' => 'DELETE',
+            'Audits.model' => 'Articles',
+            'Audits.entity_id' => $id,
+        ],
+        order: 'Audits.created DESC')->all();
         $this->assertEquals(1, count($last_audit));
     }
 }

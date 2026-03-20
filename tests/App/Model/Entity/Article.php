@@ -12,7 +12,7 @@ class Article extends Entity
      *
      * @var array
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         'user_id' => true,
         'author_id' => true,
         'title' => true,

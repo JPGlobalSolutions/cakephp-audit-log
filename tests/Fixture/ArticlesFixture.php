@@ -38,7 +38,7 @@ class ArticlesFixture extends TestFixture
      *
      * @var array
      */
-    public $records = [
+    public array $records = [
         [
             'user_id' => 1,
             'author_id' => 1,

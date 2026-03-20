@@ -30,5 +30,5 @@ class ArticlesTagsFixture extends TestFixture
      *
      * @var array
      */
-    public $records = [];
+    public array $records = [];
 }

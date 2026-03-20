@@ -15,7 +15,7 @@ class AuditDeltasFixture extends TestFixture
      *
      * @var string
      */
-    public $table = 'audit_deltas';
+    public string $table = 'audit_deltas';
 
     /**
      * Fields
@@ -40,7 +40,7 @@ class AuditDeltasFixture extends TestFixture
      *
      * @var array
      */
-    public $records = [
+    public array $records = [
         [
             'id' => '4d557117-9334-4437-9bf6-c880065bb099',
             'audit_id' => '0c791941-4f9e-453c-9d15-43ae625b66e9',

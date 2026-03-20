@@ -15,7 +15,7 @@ class AuditsFixture extends TestFixture
      *
      * @var string
      */
-    public $table = 'audits';
+    public string $table = 'audits';
 
     /**
      * Fields
@@ -46,7 +46,7 @@ class AuditsFixture extends TestFixture
      *
      * @var array
      */
-    public $records = [
+    public array $records = [
         [
             'id' => 'bb193c39-9986-46e2-b436-e3837eec44d1',
             'event' => 'Lorem ipsum dolor sit amet',
